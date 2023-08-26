@@ -14,7 +14,8 @@ async function sendOtpViaEmail(email, otp) {
   apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
 
   const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-
+  console.log(email)
+  console.log(otp)
   const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
   sendSmtpEmail.to = [{ email: email }];
   sendSmtpEmail.subject = 'Hosting APP OTP';
@@ -56,11 +57,8 @@ const registerUser = async (req, res) => {
   }
 
   try {
-    let userE = await User.findOne({ tempEmail });
-    if (userE) {
-      return res.status(400).json({ msg: 'User already exists' });
-    }
-
+    let userE = await User.DeleteOne({ tempEmail });
+   
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
