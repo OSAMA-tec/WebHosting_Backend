@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
-
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
   },
   email: {
     type: String,
+    unique: true, // Add unique constraint
+    sparse: true, // Add sparse option
   },
   password: {
     type: String,
@@ -20,5 +20,3 @@ const UserSchema = new mongoose.Schema({
     type:Boolean,
   }
 });
-
-module.exports = mongoose.model('User', UserSchema);

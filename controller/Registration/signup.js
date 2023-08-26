@@ -46,12 +46,13 @@ const registerUser = async (req, res) => {
 
     userE = new User({
       username,
-      email:' ',
+      email: null, // Set email to null
       tempEmail,
       password: hashedPassword,
       otp,
       verified
     });
+    
 
     await userE.save();
     await sendOtpViaEmail(tempEmail, otp);
@@ -94,8 +95,8 @@ const verifyUser = async (req, res) => {
     }
 
     user.email = user.tempEmail;
-    user.tempEmail = '';
-    user.otp = '';
+    user.tempEmail = null;
+    user.otp = null;
     user.verified = true;
 
     await user.save();
