@@ -15,6 +15,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tempEmail:{
+    type: String,
+  },
+  otp:{
+    type:String,
+  },
+  verified:{
+    type:Boolean,
+  }
 });
 
 module.exports = mongoose.model('User', UserSchema);
