@@ -93,8 +93,8 @@ const verifyUser = async (req, res) => {
     }
 
     user.email = user.tempEmail;
-    user.tempEmail = null;
-    user.otp = null;
+    user.tempEmail = '';
+    user.otp = '';
     user.verified = true;
 
     await user.save();
