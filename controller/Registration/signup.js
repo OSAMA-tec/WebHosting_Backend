@@ -57,7 +57,7 @@ const registerUser = async (req, res) => {
   }
 
   try {
-    let userE = await User.DeleteOne({ tempEmail });
+    let userE = await User.deleteMany({ tempEmail });
    
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
