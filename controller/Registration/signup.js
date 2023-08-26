@@ -36,7 +36,7 @@ async function sendOtpViaEmail(email, otp) {
     </body>
     </html>
   `;
-  sendSmtpEmail.sender = { email: process.env.EMAIL_FROM, name: 'GHM Music App' };
+  sendSmtpEmail.sender = { email: process.env.EMAIL_FROM, name: 'Hosting App' };
 
   try {
     const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
