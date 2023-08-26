@@ -1,51 +1,30 @@
 const User = require('../../model/userSchema');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const SibApiV3Sdk = require('sib-api-v3-sdk');
+const emailjs = require('emailjs-com');
 require('dotenv').config();
 
+emailjs.init(process.env.EMAILJS_USER_ID);
 
-SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = process.env.SENDINBLUE_API_KEY;
-
-// Function to send OTP via Email using Sendinblue
+// Function to send OTP via Email using EmailJS
 async function sendOtpViaEmail(email, otp) {
-  const defaultClient = SibApiV3Sdk.ApiClient.instance;
-  const apiKey = defaultClient.authentications['api-key'];
-  apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
-
-  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-  console.log(email)
-  console.log(otp)
-  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-  sendSmtpEmail.to = [{ email: email }];
-  sendSmtpEmail.subject = 'Hosting APP OTP';
-  sendSmtpEmail.htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-        }
-      </style>
-    </head>
-    <body>
-      <h1>Hosting APP OTP</h1>
-      <p>Your OTP is: ${otp}</p>
-    </body>
-    </html>
-  `;
-  sendSmtpEmail.sender = { email: process.env.EMAIL_FROM, name: 'Hosting App' };
+  const templateParams = {
+    to_email: email,
+    otp: otp,
+  };
 
   try {
-    const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log('API called successfully. Returned data: ' + JSON.stringify(data));
+    const response = await emailjs.send(
+      process.env.EMAILJS_SERVICE_ID,
+      process.env.EMAILJS_TEMPLATE_ID,
+      templateParams
+    );
+    console.log('Email sent successfully:', response.status, response.text);
   } catch (error) {
-    console.error(error);
+    console.error('Failed to send email:', error);
   }
 }
+
 
 const registerUser = async (req, res) => {
   const { password } = req.body;
