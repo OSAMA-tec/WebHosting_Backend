@@ -46,6 +46,7 @@ const registerUser = async (req, res) => {
 
     userE = new User({
       username,
+      email:' ',
       tempEmail,
       password: hashedPassword,
       otp,
