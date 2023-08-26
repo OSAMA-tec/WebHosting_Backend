@@ -1,30 +1,30 @@
 const User = require('../../model/userSchema');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const emailjs = require('emailjs-com');
 require('dotenv').config();
 
-emailjs.init(process.env.EMAILJS_USER_ID);
+const SibApiV3Sdk = require('sib-api-v3-sdk');
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
 
-// Function to send OTP via Email using EmailJS
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+// Function to send OTP via Email using Sendinblue
 async function sendOtpViaEmail(email, otp) {
-  const templateParams = {
-    to_email: email,
-    otp: otp,
-  };
+  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+  sendSmtpEmail.to = [{ email: email }];
+  sendSmtpEmail.subject = 'Your OTP';
+  sendSmtpEmail.htmlContent = `<p>Your OTP is: ${otp}</p>`;
+  sendSmtpEmail.sender = { email: 'osama@email.com', name: 'OSAMA' };
 
   try {
-    const response = await emailjs.send(
-      process.env.EMAILJS_SERVICE_ID,
-      process.env.EMAILJS_TEMPLATE_ID,
-      templateParams
-    );
-    console.log('Email sent successfully:', response.status, response.text);
+    const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log('Email sent successfully:', response);
   } catch (error) {
     console.error('Failed to send email:', error);
   }
 }
-
 
 const registerUser = async (req, res) => {
   const { password } = req.body;
