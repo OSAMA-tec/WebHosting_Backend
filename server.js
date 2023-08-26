@@ -7,7 +7,14 @@ const app = express();
 
 connectDB();
 
-app.use(cors());
+const corsOptions = {
+  origin: '*', // Allow any origin
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ extended: false }));
 
 app.use('/api/users', userRoute);
