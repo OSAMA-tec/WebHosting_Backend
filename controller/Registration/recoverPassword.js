@@ -2,18 +2,17 @@ const User = require('../../../models/User');
 const bcrypt = require('bcryptjs');
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 
-
 const recoverPassword = async (req, res) => {
     try {
-        const { email } = req.body
+        const { email } = req.body;
         if (!email) {
             return res.status(500).send('Email not passed');
         }
-        let user = await User.findOne({ 'local.email': email });
+        let user = await User.findOne({ 'email': email });
         if (!user) {
             return res.status(400).send('User not Found');
         }
-        if (!user.local.verified) {
+        if (!user.verified) {
             // Delete unverified user
             await User.deleteOne({ _id: user.id });
             return res.status(400).json({
@@ -22,14 +21,15 @@ const recoverPassword = async (req, res) => {
         }
         // Generate OTP
         const otp = Math.floor(100000 + Math.random() * 900000);
-        user.local.otp=otp;
+        user.otp = otp;
         await user.save();
-         // Send OTP by email
-    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    sendSmtpEmail.to = [{ "email": email }];
-    sendSmtpEmail.sender = { "email": process.env.EMAIL_USERNAME, "name": "MUSIC APP" };
-    sendSmtpEmail.subject = 'Verify your email';
-    sendSmtpEmail.htmlContent = `
+
+        // Send OTP by email
+        const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+        sendSmtpEmail.to = [{ "email": email }];
+        sendSmtpEmail.sender = { "email": process.env.EMAIL_USERNAME, "name": "HOST APP" };
+        sendSmtpEmail.subject = 'Verify your email';
+        sendSmtpEmail.htmlContent = `
     <div style="
         background-color: #f8f9fa; 
         padding: 20px; 
@@ -64,26 +64,26 @@ const recoverPassword = async (req, res) => {
         </p>
     </div>
 `;
-    new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail(sendSmtpEmail)
-      .then(() => {
-        console.log('Email sent')
-      })
-      .catch((error) => {
-        console.error(error);
-      })
+        new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail(sendSmtpEmail)
+            .then(() => {
+                console.log('Email sent')
+            })
+            .catch((error) => {
+                console.error(error);
+            });
 
-      return res.status(200).json({
-        message: 'Otp send to Email',
-    });    } catch (err) {
+        return res.status(200).json({
+            message: 'Otp send to Email',
+        });
+    } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
-}
-
+};
 
 const updatePassword = async (req, res) => {
     try {
-        const password  = req.body.password;
+        const password = req.body.password;
         if (!password) {
             return res.status(500).send('password not passed');
         }
@@ -92,23 +92,17 @@ const updatePassword = async (req, res) => {
         if (!user) {
             return res.status(400).send('User not Found');
         }
-        if (!user.local.verified) {
+        if (!user.verified) {
             // Delete unverified user
             await User.deleteOne({ _id: user.id });
             return res.status(400).json({
                 message: 'User not found',
             });
         }
-        if (!user.local.otp===null) {
-            // Delete unverified user
-            return res.status(400).json({
-                message: 'Verify Otp First',
-            });
-        }
-        const salt = await bcrypt.genSalt(10);    
+        const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        user.local.password=hashedPassword;
+        user.password = hashedPassword;
         await user.save();
         return res.status(200).json({
             message: 'Password Updated',
@@ -117,10 +111,6 @@ const updatePassword = async (req, res) => {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
-}
+};
 
-
-
-
-module.exports={recoverPassword,updatePassword};
-
+module.exports = { recoverPassword, updatePassword };
