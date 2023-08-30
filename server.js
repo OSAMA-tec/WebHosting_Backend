@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const userRoute = require('./route/userRoute');
+const adminRoute = require('./route/adminRoute');
 const cors = require('cors');
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(cors(corsOptions));
 app.use(express.json({ extended: false }));
 
 app.use('/api/users', userRoute);
+app.use('/api/admin', adminRoute);
 
 // Error middleware
 app.use((err, req, res, next) => {
