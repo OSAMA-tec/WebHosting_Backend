@@ -46,7 +46,6 @@ const registerUser = async (req, res) => {
 
     userE = new User({
       username,
-      email: null, // Set email to null
       tempEmail,
       password: hashedPassword,
       otp,

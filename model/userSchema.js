@@ -22,3 +22,6 @@ const UserSchema = new mongoose.Schema({
     type:Boolean,
   }
 });
+const userSchema = mongoose.model('userSchema', UserSchema);
+
+module.exports = userSchema;
