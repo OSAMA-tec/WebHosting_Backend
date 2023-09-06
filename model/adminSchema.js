@@ -15,6 +15,18 @@ const AdminSchema = new mongoose.Schema({
   tempEmail:{
     type: String,
   },
+  phoneNumber: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
   otp:{
     type:String,
   },
@@ -23,6 +35,6 @@ const AdminSchema = new mongoose.Schema({
   }
 });
 
-const adminSchema = mongoose.model('adminSchema', AdminSchema);
+const adminSchema = mongoose.model('Admin', AdminSchema);
 
 module.exports = adminSchema;

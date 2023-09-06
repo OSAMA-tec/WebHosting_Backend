@@ -26,7 +26,7 @@ const Login= async (req, res) => {
     const token = jwt.sign(
       { id: existingAdmin._id, email: existingAdmin.email },
       process.env.JWT_ADMIN,
-      { expiresIn: '1h' }
+      { expiresIn: '60 days' }
     );
 
     res.status(200).json({ token, admin: existingAdmin });

@@ -29,7 +29,7 @@ const Singup= async (req, res) => {
     const token = jwt.sign(
       { id: newAdmin._id, email: newAdmin.email },
       process.env.JWT_ADMIN,
-      { expiresIn: '1h' }
+      { expiresIn: '60 days' }
     );
 
     res.status(201).json({ token, admin: newAdmin });

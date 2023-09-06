@@ -6,8 +6,8 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    unique: true, // Add unique constraint
-    sparse: true, // Add sparse option
+    unique: true, 
+    sparse: true,
   },
   password: {
     type: String,
@@ -15,7 +15,28 @@ const UserSchema = new mongoose.Schema({
   tempEmail:{
     type: String,
   },
+  phoneNumber: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
   otp:{
+    type:String,
+  },
+  packageName:{
+    type:String,
+  },
+  DomainName:{
+    type:String,
+  },
+  DomainName:{
     type:String,
   },
   verified:{
@@ -23,6 +44,6 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-const userSchema = mongoose.model('userSchema', UserSchema);
+const userSchema = mongoose.model('User', UserSchema);
 
 module.exports = userSchema;
