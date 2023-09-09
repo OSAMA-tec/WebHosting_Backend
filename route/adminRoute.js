@@ -15,14 +15,8 @@ const {getAcceptedOrders}=require('../controller/Admin/acceptOrder')
 
 
 
-router.post(
-  '/register',
-  Singup
-)
-router.post(
-    '/login',
-    Login
-)
+router.post('/register',Singup)
+router.post('/login',Login)
 //Update data
 router.put('/admin/:id', auth,updateAdmin);
 //createUser

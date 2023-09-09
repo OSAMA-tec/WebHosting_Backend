@@ -5,6 +5,9 @@ const PaymentSchema = new mongoose.Schema({
     type: String,
     enum: ['cPanel Hosting', 'Shared Hosting', 'Business Hosting'],
   },
+  subpackageName: {
+    type: String,
+  },
   domainName: {
     type: String,
   },

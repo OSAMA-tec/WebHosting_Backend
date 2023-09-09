@@ -18,6 +18,7 @@
     "jsonwebtoken": "^9.0.1",
     "mailgun-js": "^0.22.0",
     "mongoose": "^7.4.4",
+    "pdfkit": "^0.13.0",
     "sib-api-v3-sdk": "^8.5.0",
     "xmlhttprequest": "^1.8.0"
   }

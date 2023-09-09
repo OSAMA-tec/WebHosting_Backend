@@ -6,6 +6,10 @@ const OrderSchema = new mongoose.Schema({
     required: true,
     default: Date.now
   },
+  packageId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Package',
+  },
   clientName: {
     type: String,
     required: true
